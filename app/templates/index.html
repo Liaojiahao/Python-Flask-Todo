@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+    <form class="input-group" action="/add" method="post">
+        {{ form.hidden_tag() }}
+        {{ form.content(class="form-control") }}
+    <span class="input-group-btn">
+        <button class="btn btn-primary" type="submit">Add</button>
+    </span>
+    </form>
+    {% for error in form.errors.content %}
+        <div class="flash alert-danger"><span>{{ error }}</span></div>
+    {% endfor %}
+
+    <div>
+        <h2>Todo List</h2>
+        {% if todos %}
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>content</th>
+                    <th>time</th>
+                    <th>operation</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for t in todos %}
+                    {% if t.status == 0 %}
+                        <tr class="info">
+                            <td>{{ t.content }}</td>
+                            <td>{{ t.time.strftime('%H:%M %d-%m-%Y') }}</td>
+                            <td>
+                                <a href="/done/{{ t.id }}" class="btn btn-primary">Done</a>
+                                <a href="/delete/{{ t.id }}" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr class="danger">
+                            <td id="center">{{ t.content }}</td>
+                            <td>{{ t.time.strftime('%H:%M %d-%m-%Y') }}</td>
+                            <td>
+                                <a href="/undone/{{ t.id }}" class="btn btn-primary">Undone</a>
+                                <a href="/delete/{{ t.id }}" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h3 class="text-info">No todos, please add</h3>
+        {% endif %}
+
+    </div>
+{% endblock %}
+
